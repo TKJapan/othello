@@ -1,5 +1,5 @@
 'use client';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 const MatrixDisplay = () => {
     // 8は壁
@@ -42,19 +42,6 @@ const MatrixDisplay = () => {
     const ganeStart = () => {
         console.log("start")
       }
-    
-    
-      const upsideDown = () => {
-        console.log("excute upsidedown")
-        const upsideDown =  squares.map((row: any, tateIndex: any) => (
-              row.map((cell: any, yokoIndex: any) => (
-                [row][cell] = 0
-              ))
-          ))
-          // squares[1][3] = 20
-        setSquares(upsideDown);
-        }
-
       // 白だったら配列に１を保存、黒だったら２を保存
       //黒と白を交互に変更
       const changePiece = (cell:any,tateIndex:any,yokoIndex:any) => {
@@ -74,98 +61,204 @@ const MatrixDisplay = () => {
           return;
         }
 
-        if(player=="black"){
-          // 同じ色で挟めているか確認
-          if(checkBoardSituation(cell, squares, tateIndex, yokoIndex) == true) {
-                          
-              // 配列に保存
-              squares[tateIndex][yokoIndex] = 2;
-              // 置いたらプレイヤーを入れ替える
-              setCount(count + 1);
-              console.log("countは、",count)
-              if(count % 2 == 0){
-                setPlayer("white")
-              } 
-              else{
-                setPlayer("black")
-              }
-              console.log("次のplayer",player)
-            }
-          }
+        // checkBoardSituation の結果を受け取る
+        const canFlip = checkBoardSituation(cell, squares, tateIndex, yokoIndex);
 
-        
-        if(player=="white"){
-           // 同じ色で挟めているか確認
-          if(checkBoardSituation(cell, squares, tateIndex, yokoIndex) == true){
-            // 配列に保存
-            squares[tateIndex][yokoIndex] = 1
-            setCount(count + 1);
-            // 置いたらプレイヤーを入れ替える
-            console.log("countは、",count)
-            if(count % 2 == 0){
-              setPlayer("white")  
-            } 
-            else{
-              setPlayer("black")
-            }
-            console.log("次のplayer",player)
-          }
-          }
-          setSquares(
-            [...squares]    
-          )
-          console.log("squares",squares)
-          return;  
-      }
+        if (player === "black" && canFlip) {
+
+          // ２次元配列を更新
+          squares[tateIndex][yokoIndex] = 2;
+          setCount(count + 1);
+          setPlayer("white");
+        } else if (player === "white" && canFlip) {
+
+          // ２次元配列を更新
+          squares[tateIndex][yokoIndex] = 1;
+          setCount(count + 1);
+          setPlayer("black");
+        } else {
+          setMessage("その場所には置けません.");
+        }
+      
+        setSquares([...squares]);
+      };      
 
       const checkBoardSituation = (cell:any, squares:any, tateIndex:any, yokoIndex:any) => {
-        // 横列に自分の色があるか
         console.log("checkBoardSituationの現在のプレイヤーは、",player)
         
         if(player == "black"){
-          let tatePosition = 0;
-          let yokoPosition = 0;
-            for(let tate=0; tate <= 7; tate++){
-              
-              for(let yoko=0; yoko <= 7; yoko++){
-                console.log("[tate][yoko]は、 ",[tate][yoko])
-                // 調べるマスが白ならループ
-                while(squares[tate][yoko]==1)
-                {
-                  tatePosition += tate;
-                  yokoPosition += yoko;
-                  if([tate][yoko]==2){
-                    console.log("挟める");
-                    return true   
-                  }    
-                }
+          const opponent = 1; // 白石
+          const currentPlayer = 2; // 黒石
+          let canFlip = false;
+
+          // 上方向
+          if (tateIndex > 1 && squares[tateIndex - 1][yokoIndex] === opponent) {
+            let tate = tateIndex - 1;
+            while (tate >= 0) {
+              if (squares[tate][yokoIndex] === currentPlayer) {
+                // flipPieceに、上方向の相手の位置を記録
+                squares[tate][yokoIndex] = 2;
+                setSquares([...squares]);
+
+                canFlip = true;
+                break;
+              } else if (squares[tate][yokoIndex] === 0) {
+                break;
               }
+              tate--;
             }
           }
-          if(player == "white"){
-            let tatePosition = 0;
-            let yokoPosition = 0;
-              for(let tate=0; tate <= 7; tate++){
-                for(let yoko=0; yoko <= 7; yoko++){
-                  console.log("[tate][yoko]は、 ",[tate][yoko])
-                  // 調べるマスが黒ならループ
-                  while(squares[tate][yoko]==2)
-                  {
-                    if([tate][yoko]==1){
-                      console.log("挟める");
-                      return true
-                      
-                    }
-                }
+          // 下方向
+          if (tateIndex > 1 && squares[tateIndex + 1][yokoIndex] === opponent) {
+            let tate = tateIndex + 1;
+            while (tate <= 9) {
+              if (squares[tate][yokoIndex] === currentPlayer) {
+                squares[tate][yokoIndex] = 2;
+                setSquares([...squares]);
+
+                canFlip = true;
+                break;
+              } else if (squares[tate][yokoIndex] === 0) {
+                break;
               }
+              tate++;
             }
           }
+          // 左方向
+          if (yokoIndex > 1 && squares[tateIndex][yokoIndex - 1] === opponent) {
+            let yoko = yokoIndex - 1;
+            while (yoko >= 0) {
+              if (squares[tateIndex][yoko] === currentPlayer) {
+                squares[tateIndex][yoko] = 2;
+                setSquares([...squares]);
+
+                canFlip = true;
+                break;
+              } else if (squares[tateIndex][yoko] === 0) {
+                break;
+              }
+              yoko--;
+            }
+          }
+          // 右方向
+          if (yokoIndex < 9 && squares[tateIndex][yokoIndex + 1] === opponent) {
+            let yoko = yokoIndex + 1;
+            while (yoko <= 9) {
+              if (squares[tateIndex][yoko] === currentPlayer) {
+                squares[tateIndex][yoko] = 2;
+                setSquares([...squares]);
+
+                canFlip = true;
+                break;
+              } else if (squares[tateIndex][yoko] === 0) {
+                break;
+              }
+              yoko++;
+            }
+          }
+          // 他の方向に対しても同様に判定を行う（下、左、右、左上、右上、左下、右下）
+          // 左上方向
+          if (tateIndex > 1 && yokoIndex > 1 && squares[tateIndex + 1][yokoIndex - 1] === opponent) {
+            let tate = tateIndex + 1;
+            let yoko = yokoIndex - 1;
+            while(tate >= 0){
+              while (yoko >= 0) {
+                if (squares[tateIndex + 1][yoko - 1] === currentPlayer) {
+                  squares[tateIndex + 1][yoko - 1]= 2;
+                  setSquares([...squares]);
+
+                  canFlip = true;
+                  break;
+                } else if (squares[tateIndex + 1][yoko - 1] === 0) {
+                  break;
+                }
+                tate++;
+                yoko--;
+              }
+            } 
+          }
+          return canFlip;
+          }
+          else if(player == "white"){
+            const opponent = 2; // 黒石
+            const currentPlayer = 1; // 白石
+            let canFlip = false;
+  
+            // 上方向
+            if (tateIndex > 1 && squares[tateIndex - 1][yokoIndex] === opponent) {
+              let tate = tateIndex - 1;
+              while (tate >= 0) {
+                if (squares[tate][yokoIndex] === currentPlayer) {
+                  squares[tate][yokoIndex] = 1;
+                  setSquares([...squares]);
+
+                  canFlip = true;
+                  break;
+                } else if (squares[tate][yokoIndex] === 0) {
+                  break;
+                }
+                tate--;
+              }
+            }
+  
+            // 下方向
+            if (tateIndex > 1 && squares[tateIndex + 1][yokoIndex] === opponent) {
+              let tate = tateIndex + 1;
+              while (tate <= 9) {
+                if (squares[tate][yokoIndex] === currentPlayer) {
+                  squares[tate][yokoIndex] = 1;
+                  setSquares([...squares]);
+
+                  canFlip = true;
+                  break;
+                } else if (squares[tate][yokoIndex] === 0) {
+                  break;
+                }
+                tate++;
+              }
+            }
+            // 左方向
+            if (yokoIndex > 1 && squares[tateIndex][yokoIndex - 1] === opponent) {
+              let yoko = yokoIndex - 1;
+              while (yoko >= 0) {
+                if (squares[tateIndex][yoko] === currentPlayer) {
+                  squares[tateIndex][yoko]  = 1;
+                  setSquares([...squares]);
+
+                  canFlip = true;
+                  break;
+                } else if (squares[tateIndex][yoko] === 0) {
+                  break;
+                }
+                yoko--;
+              }
+            }
+            // 右方向
+            if (yokoIndex < 9 && squares[tateIndex][yokoIndex + 1] === opponent) {
+              let yoko = yokoIndex + 1;
+              while (yoko <= 9) {
+                if (squares[tateIndex][yoko] === currentPlayer) {
+                  squares[tateIndex][yoko]  = 1;
+                  setSquares([...squares]);
+
+                  canFlip = true;
+                  break;
+                } else if (squares[tateIndex][yoko] === 0) {
+                  break;
+                }
+                yoko++;
+              }
+            }
+
+          return canFlip;
+        }
+
       }
         
   return (
     <div>
     <button onClick={ganeStart}style={buttonStyle}>ゲーム開始</button>
-    <button onClick={upsideDown} style={buttonStyle}>置く</button>
+    <p style={pStyle}>現在のプレイヤー：{player}</p>
     <p style={pStyle}>メッセージ：{message}</p>
     <br /><br />
       <table style={tableStyle}>
