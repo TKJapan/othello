@@ -94,7 +94,7 @@ const MatrixDisplay = () => {
             while (tateWay >= 0) {
               if (squares[tateWay][yokoIndex] === currentPlayer) {
                 console.log("挟めるのを確認")
-                
+
                 // ２次元配列を更新
                 squares[tateIndex][yokoIndex] = currentPlayer;
                 setSquares([...squares]);
@@ -287,23 +287,27 @@ const MatrixDisplay = () => {
       const upFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
         console.log("upFlipPiece開始")
         console.log("changeするポジションは、",myTatePosition + 1,":",myYokoPosition)
-        console.log("currentPlayerは、",currentPlayer)
-        console.log("opponentは、",opponent)
+
           // squares[tatePosition][yokoPosition]は、自分のコマの位置なので、１つ戻すため、縦にプラス１する。
-          console.log("squares[tatePosition + 1][yokoPosition]に位置するのは、currentPlayer",squares[myTatePosition + 1][myYokoPosition])
           squares[myTatePosition + 1][myYokoPosition] = currentPlayer;
+          
 
           // 見つかった自分は、一番上の自分のコマなので、上から下に見ていく必要がある。
-          const flipDownWay = 7;
+          const flipDownWay = 9;
+          console.log("myTatePosition:",myTatePosition)
           for(let i = myTatePosition + 1; myTatePosition < flipDownWay; i++){
+            console.log("for文: i:",i,":myYokoPosition:",myYokoPosition)
+            console.log("ループ:",squares[i][myYokoPosition])
             if(squares[i][myYokoPosition] === opponent){
+              
               squares[i][myYokoPosition] = currentPlayer;
-              setSquares([...squares]);
+              
             }
             else{
               break;
             }
           }
+          setSquares([...squares]);
         }
         
       
@@ -313,11 +317,14 @@ const MatrixDisplay = () => {
         console.log("changeするポジションは、",myTatePosition - 1,":",myYokoPosition)
         // squares[tatePosition][yokoPosition]は、自分のコマの位置なので、１つ戻すため、縦-１する。
           squares[myTatePosition - 1][myYokoPosition] = currentPlayer;
+          
 
           // 見つかった自分は、一番下の自分のコマなので、下から上に見ていく必要がある。
           const flipUpWay = 0;
           for(let i = myTatePosition - 1; myTatePosition > flipUpWay; i--){
+            console.log("for文: i:",i,":myYokoPosition:",myYokoPosition)
             if(squares[i][myYokoPosition] === opponent){
+              console.log("ループ:",i)
               squares[i][myYokoPosition] = currentPlayer;
               setSquares([...squares]);
             }
@@ -325,45 +332,53 @@ const MatrixDisplay = () => {
               break;
             }
           }
+          setSquares([...squares]);
       }
       // 相手の左にコマを置いて、右方向を確認して、ひっくり返る時の関数
       const rightFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
         console.log("rightFlipPiece開始")
         console.log("changeするポジションは、",myTatePosition,":",myYokoPosition - 1)
-        // squares[tatePosition][yokoPosition]は、自分のコマの位置なので、１つ戻すため、縦にプラス１する。
+        // squares[tatePosition][yokoPosition]は、自分のコマの位置なので、１つ戻すため、横に-１する。
           squares[myTatePosition][myYokoPosition - 1] =  currentPlayer;
+          
 
           // 見つかった自分は、一番右の自分のコマなので、右から左に見ていく必要がある。
           const flipRightWay = 0;
           for(let i = myYokoPosition - 1; myYokoPosition > flipRightWay; i--){
-            if(squares[i][myYokoPosition] === opponent){
-              squares[i][myYokoPosition] = currentPlayer;
+            console.log("for文: myTatePosition:", myTatePosition," :i: ",i)
+            if(squares[myTatePosition][i] === opponent){
+              console.log("ループ:",i)
+              squares[myTatePosition][i] = currentPlayer;
               setSquares([...squares]);
             }
             else{
               break;
             }
           }
+          setSquares([...squares]);
       }
       // 左方向を確認して、ひっくり返る時の関数
       const leftFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
         console.log("leftFlipPiece開始")
         console.log("changeするポジションは、",myTatePosition,":",myYokoPosition + 1)
-        // squares[tatePosition][yokoPosition]は、自分のコマの位置なので、１つ戻すため、縦に-１する。
+        // squares[tatePosition][yokoPosition]は、自分のコマの位置なので、１つ戻すため、横に+１する。
           squares[myTatePosition][myYokoPosition + 1] = currentPlayer;
+          
 
           // 見つかった自分は、一番左の自分のコマなので、左から右に見ていく必要がある。
-          const flipLeftWay = 7;
+          const flipLeftWay = 8;
           for(let i = myYokoPosition + 1; myYokoPosition < flipLeftWay; i++){
-            if(squares[i][myYokoPosition] === opponent){
-              squares[i][myYokoPosition] = currentPlayer;
+            console.log("for文: myTatePosition:", myTatePosition," :i: ",i)
+            if(squares[myTatePosition][i] === opponent){
+              console.log("ループ:",i)
+              squares[myTatePosition][i] = currentPlayer;
               setSquares([...squares]);
             }
             else{
               break;
             }
           }
-        setSquares([...squares]);
+          setSquares([...squares]);
       }
         
   return (
