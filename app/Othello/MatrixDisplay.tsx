@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 const MatrixDisplay = () => {
     // 0は何も置いていない状態
@@ -24,17 +24,17 @@ const MatrixDisplay = () => {
 
     const [message, setMessage] = useState("");
 
-    const tableStyle = {"backgroundColor":"green","borderWidth":"2px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'};
+    const tableStyle = {backgroundColor:"#00BF64",borderWidth:"2px", borderColor:"#aaaaaa", borderStyle:'solid'};
 
-    const tdStyle = {"textAlign": "center" as "center","height":"4em","width":"4em","borderWidth":"2px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'};
+    const tdStyle = {textAlign: "center" as "center",height:"4em",width:"4em",borderWidth:"2px", borderColor:"#aaaaaa", borderStyle:'solid'};
   
-    const buttonStyle = {"backgroundColor":"pink","fontColor":"black","height":"2em","width":"10em","borderWidth":"2px", 'borderColor':"#aaaaaa", 'borderStyle':'solid'};
+    const buttonStyle = {backgroundColor:"pink",fontColor:"black",height:"2em",width:"10em",borderWidth:"2px", borderColor:"#aaaaaa", borderStyle:'solid'};
 
     const pStyle = {}
 
-    const whiteStyle: { [key: string]: any } = {"borderRadius":"50px","backgroundColor":"white"}
+    const imgStyle = { width:"60px", display:"flex", alignItems:"center", justifyContent:"center"}
 
-    const blackStyle: { [key: string]: any } = {"borderRadius":"50px","backgroundColor":"black"}
+
 
     const pass = () => {
       if (player === "black") {
@@ -109,7 +109,7 @@ const MatrixDisplay = () => {
                   upFlipPiece(upperOpponentPosition,yokoIndex,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[upperOpponentPosition][yokoIndex] === 0) {
                   break;
                 }
@@ -141,7 +141,7 @@ const MatrixDisplay = () => {
                   downFlipPiece(downOpponentPosition,yokoIndex,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[downOpponentPosition][yokoIndex] === 0) {
                   break;
                 }
@@ -171,7 +171,7 @@ const MatrixDisplay = () => {
                   leftFlipPiece(tateIndex,leftOpponentPosition,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[tateIndex][leftOpponentPosition] === 0) {
                   break;
                 }
@@ -199,7 +199,7 @@ const MatrixDisplay = () => {
                   rightFlipPiece(tateIndex,rightOpponentPosition,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[tateIndex][rightOpponentPosition] === 0) {
                   break;
                 }
@@ -214,13 +214,13 @@ const MatrixDisplay = () => {
           const upperLeftLimitYoko = 0;
 
             // 相手のコマが左上にある場合
-          if(tateIndex != 0 && yokoIndex != 0){
+          if(!(tateIndex <= 0 || yokoIndex <= 0)){
             if (squares[tateIndex + upperLeftPositionTate][yokoIndex + upperLeftPositionYoko] === opponent) {
               // 相手の位置を代入
               let upperLeftOpponentPositionTate = tateIndex + upperLeftPositionTate;
               let upperLeftOpponentPositionYoko = yokoIndex + upperLeftPositionYoko;
               // 相手の位置が縦列か横列の0より大きい間
-              while (upperLeftOpponentPositionTate > upperLeftLimitTate && upperLeftOpponentPositionYoko > upperLeftLimitYoko) {
+              while (upperLeftOpponentPositionTate >= upperLeftLimitTate && upperLeftOpponentPositionYoko > upperLeftLimitYoko) {
                 if (squares[upperLeftOpponentPositionTate][upperLeftOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -235,7 +235,7 @@ const MatrixDisplay = () => {
                   upperLeftFlipPiece(upperLeftOpponentPositionTate,upperLeftOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[upperLeftOpponentPositionTate][upperLeftOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -251,13 +251,13 @@ const MatrixDisplay = () => {
           const upperRightLimitYoko = 7;
 
             // 相手のコマが左上にある場合
-          if(tateIndex != 0 && yokoIndex != 7){
+          if(!(tateIndex <= 0 || yokoIndex >= 7)){
             if (squares[tateIndex + upperRightPositionTate][yokoIndex + upperRightPositionYoko] === opponent) {
               // 相手の位置を代入
               let upperRightOpponentPositionTate = tateIndex + upperRightPositionTate;
               let upperRightOpponentPositionYoko = yokoIndex + upperRightPositionYoko;
               // 相手の位置が縦列か横列の0より大きい間
-              while (upperRightOpponentPositionTate > upperRightLimitTate && upperRightOpponentPositionYoko < upperRightLimitYoko) {
+              while (upperRightOpponentPositionTate >= upperRightLimitTate && upperRightOpponentPositionYoko <= upperRightLimitYoko) {
                 if (squares[upperRightOpponentPositionTate][upperRightOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -272,7 +272,7 @@ const MatrixDisplay = () => {
                   upperRightFlipPiece(upperRightOpponentPositionTate,upperRightOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[upperRightOpponentPositionTate][upperRightOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -288,13 +288,13 @@ const MatrixDisplay = () => {
           const downLeftLimitYoko = 0;
 
             // 相手のコマが左下にある場合
-          if(tateIndex != 7 && yokoIndex != 0){
+          if(!(tateIndex >= 7 || yokoIndex <= 0)){
             if (squares[tateIndex + downLeftPositionTate][yokoIndex + downLeftPositionYoko] === opponent) {
               // 相手の位置を代入
               let downLeftOpponentPositionTate = tateIndex + downLeftPositionTate;
               let downLeftOpponentPositionYoko = yokoIndex + downLeftPositionYoko;
               
-              while (downLeftOpponentPositionTate < downLeftLimitTate && downLeftOpponentPositionYoko > downLeftLimitYoko) {
+              while (downLeftOpponentPositionTate <= downLeftLimitTate && downLeftOpponentPositionYoko >= downLeftLimitYoko) {
                 if (squares[downLeftOpponentPositionTate][downLeftOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -309,7 +309,7 @@ const MatrixDisplay = () => {
                   downLeftFlipPiece(downLeftOpponentPositionTate,downLeftOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[downLeftOpponentPositionTate][downLeftOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -324,15 +324,14 @@ const MatrixDisplay = () => {
           const downRightLimitTate = 7;
           const downRightLimitYoko = 7;
 
-          if(tateIndex != 7 && yokoIndex != 7){
-
+          if(!(tateIndex >= 7 || yokoIndex >= 7)){
             // 相手のコマが右下にある場合
             if (squares[tateIndex + downRightPositionTate][yokoIndex + downRightPositionYoko] === opponent) {
               // 相手の位置を代入
               let downRightOpponentPositionTate = tateIndex + downRightPositionTate;
               let downRightOpponentPositionYoko = yokoIndex + downRightPositionYoko;
               // 相手の位置が縦列か横列の0より大きい間
-              while (downRightOpponentPositionTate < downRightLimitTate || downRightOpponentPositionYoko < downRightLimitYoko) {
+              while (downRightOpponentPositionTate <= downRightLimitTate && downRightOpponentPositionYoko <= downRightLimitYoko) {
                 if (squares[downRightOpponentPositionTate][downRightOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -347,7 +346,7 @@ const MatrixDisplay = () => {
                   downRightFlipPiece(downRightOpponentPositionTate,downRightOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+ 
                 } else if (squares[downRightOpponentPositionTate][downRightOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -388,7 +387,7 @@ const MatrixDisplay = () => {
                   upFlipPiece(upperOpponentPosition,yokoIndex,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[upperOpponentPosition][yokoIndex] === 0) {
                   break;
                 }
@@ -420,7 +419,7 @@ const MatrixDisplay = () => {
                   downFlipPiece(downOpponentPosition,yokoIndex,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[downOpponentPosition][yokoIndex] === 0) {
                   break;
                 }
@@ -450,7 +449,7 @@ const MatrixDisplay = () => {
                   leftFlipPiece(tateIndex,leftOpponentPosition,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[tateIndex][leftOpponentPosition] === 0) {
                   break;
                 }
@@ -478,7 +477,7 @@ const MatrixDisplay = () => {
                   rightFlipPiece(tateIndex,rightOpponentPosition,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[tateIndex][rightOpponentPosition] === 0) {
                   break;
                 }
@@ -493,13 +492,13 @@ const MatrixDisplay = () => {
           const upperLeftLimitYoko = 0;
 
             // 相手のコマが左上にある場合
-          if(tateIndex != 0 && yokoIndex != 0){
+          if(!(tateIndex <= 0 || yokoIndex <= 0)){
             if (squares[tateIndex + upperLeftPositionTate][yokoIndex + upperLeftPositionYoko] === opponent) {
               // 相手の位置を代入
               let upperLeftOpponentPositionTate = tateIndex + upperLeftPositionTate;
               let upperLeftOpponentPositionYoko = yokoIndex + upperLeftPositionYoko;
               // 相手の位置が縦列か横列の0より大きい間
-              while (upperLeftOpponentPositionTate > upperLeftLimitTate && upperLeftOpponentPositionYoko > upperLeftLimitYoko) {
+              while (upperLeftOpponentPositionTate >= upperLeftLimitTate && upperLeftOpponentPositionYoko >= upperLeftLimitYoko) {
                 if (squares[upperLeftOpponentPositionTate][upperLeftOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -514,7 +513,7 @@ const MatrixDisplay = () => {
                   upperLeftFlipPiece(upperLeftOpponentPositionTate,upperLeftOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[upperLeftOpponentPositionTate][upperLeftOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -530,13 +529,13 @@ const MatrixDisplay = () => {
           const upperRightLimitYoko = 7;
 
             // 相手のコマが左上にある場合
-          if(tateIndex != 0 && yokoIndex != 7){
+          if(!(tateIndex <= 0 || yokoIndex >= 7)){
             if (squares[tateIndex + upperRightPositionTate][yokoIndex + upperRightPositionYoko] === opponent) {
               // 相手の位置を代入
               let upperRightOpponentPositionTate = tateIndex + upperRightPositionTate;
               let upperRightOpponentPositionYoko = yokoIndex + upperRightPositionYoko;
               // 相手の位置が縦列か横列の0より大きい間
-              while (upperRightOpponentPositionTate > upperRightLimitTate && upperRightOpponentPositionYoko < upperRightLimitYoko) {
+              while (upperRightOpponentPositionTate >= upperRightLimitTate && upperRightOpponentPositionYoko <= upperRightLimitYoko) {
                 if (squares[upperRightOpponentPositionTate][upperRightOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -551,7 +550,7 @@ const MatrixDisplay = () => {
                   upperRightFlipPiece(upperRightOpponentPositionTate,upperRightOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[upperRightOpponentPositionTate][upperRightOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -567,13 +566,13 @@ const MatrixDisplay = () => {
           const downLeftLimitYoko = 0;
 
             // 相手のコマが左下にある場合
-          if(tateIndex != 7 && yokoIndex != 0){
+          if(!(tateIndex >= 7 || yokoIndex <= 0)){
             if (squares[tateIndex + downLeftPositionTate][yokoIndex + downLeftPositionYoko] === opponent) {
               // 相手の位置を代入
               let downLeftOpponentPositionTate = tateIndex + downLeftPositionTate;
               let downLeftOpponentPositionYoko = yokoIndex + downLeftPositionYoko;
               
-              while (downLeftOpponentPositionTate < downLeftLimitTate && downLeftOpponentPositionYoko > downLeftLimitYoko) {
+              while (downLeftOpponentPositionTate <= downLeftLimitTate && downLeftOpponentPositionYoko >= downLeftLimitYoko) {
                 if (squares[downLeftOpponentPositionTate][downLeftOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -588,7 +587,7 @@ const MatrixDisplay = () => {
                   downLeftFlipPiece(downLeftOpponentPositionTate,downLeftOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+
                 } else if (squares[downLeftOpponentPositionTate][downLeftOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -603,15 +602,14 @@ const MatrixDisplay = () => {
           const downRightLimitTate = 7;
           const downRightLimitYoko = 7;
 
-          if(tateIndex != 7 && yokoIndex != 7){
-
+          if(!(tateIndex >= 7 || yokoIndex >= 7)){
             // 相手のコマが右下にある場合
             if (squares[tateIndex + downRightPositionTate][yokoIndex + downRightPositionYoko] === opponent) {
               // 相手の位置を代入
               let downRightOpponentPositionTate = tateIndex + downRightPositionTate;
               let downRightOpponentPositionYoko = yokoIndex + downRightPositionYoko;
               // 相手の位置が縦列か横列の0より大きい間
-              while (downRightOpponentPositionTate < downRightLimitTate || downRightOpponentPositionYoko < downRightLimitYoko) {
+              while (downRightOpponentPositionTate <= downRightLimitTate && downRightOpponentPositionYoko <= downRightLimitYoko) {
                 if (squares[downRightOpponentPositionTate][downRightOpponentPositionYoko] === currentPlayer) {
                   console.log("挟めるのを確認")
 
@@ -626,7 +624,7 @@ const MatrixDisplay = () => {
                   downRightFlipPiece(downRightOpponentPositionTate,downRightOpponentPositionYoko,opponent,currentPlayer);
 
                   canFlip = true;
-                  break;
+ 
                 } else if (squares[downRightOpponentPositionTate][downRightOpponentPositionYoko] === 0) {
                   break;
                 }
@@ -635,7 +633,6 @@ const MatrixDisplay = () => {
               }
             }
           }
-
           return canFlip;
           }
         }
@@ -643,91 +640,103 @@ const MatrixDisplay = () => {
       
       // 相手の下にコマを置いて、上方向を確認して、ひっくり返る時の関数
       const upFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("upFlipPiece開始")
+        console.log("upFlipPiece開始-------------------------------------")
 
           // 見つかった自分は、一番上の自分のコマなので、上から下に見ていく必要がある。
           const flipDownWay = 7;
-          for(let i = myTatePosition + 1; i < flipDownWay; i++){
+            if(!(myTatePosition >= 7)){
+          for(let i = myTatePosition + 1; i <= flipDownWay; i++){
 
             if(squares[i][myYokoPosition] === opponent){
               
               squares[i][myYokoPosition] = currentPlayer;
               console.log("ひっくり返る場所",i,"：",myYokoPosition)
-              
             }
             else{
               break;
             }
           }
           setSquares([...squares]);
+          return;
+        }
         }
         
       
       // 上方向を確認して、下方向へひっくり返る時の関数
       const downFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("downFlipPiece開始")
+        console.log("downFlipPiece開始-------------------------------------")
 
           // 見つかった自分は、一番下の自分のコマなので、下から上に見ていく必要がある。
           const flipUpWay = 0;
-          for(let i = myTatePosition - 1; i > flipUpWay; i--){
+          if(!(myTatePosition <= 0)){
+          for(let i = myTatePosition - 1; i >= flipUpWay; i--){
 
             if(squares[i][myYokoPosition] === opponent){
 
               squares[i][myYokoPosition] = currentPlayer;
-              setSquares([...squares]);
+              console.log("ひっくり返る場所",i,"：",myYokoPosition)
             }
             else{
               break;
             }
           }
           setSquares([...squares]);
+          return;
       }
+    }
       // 相手の左にコマを置いて、右方向を確認して、ひっくり返る時の関数
       const rightFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("rightFlipPiece開始")
+        console.log("rightFlipPiece開始-------------------------------------")
 
           // 見つかった自分は、一番右の自分のコマなので、右から左に見ていく必要がある。
           const flipRightWay = 0;
-          for(let i = myYokoPosition - 1; i > flipRightWay; i--){
+          if(!(myYokoPosition <= 0)){
+          for(let i = myYokoPosition - 1; i >= flipRightWay; i--){
 
             if(squares[myTatePosition][i] === opponent){
 
               squares[myTatePosition][i] = currentPlayer;
-              setSquares([...squares]);
+              console.log("ひっくり返る場所",myTatePosition,"：",i)
             }
             else{
               break;
             }
           }
           setSquares([...squares]);
+          return;
+        }
+          
       }
       // 左方向を確認して、ひっくり返る時の関数
       const leftFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("leftFlipPiece開始")
+        console.log("leftFlipPiece開始-------------------------------------")
 
           // 見つかった自分は、一番左の自分のコマなので、左から右に見ていく必要がある。
           const flipLeftWay = 7;
-          for(let i = myYokoPosition + 1; i < flipLeftWay; i++){
+          if(!(myYokoPosition >= 7)){
+          for(let i = myYokoPosition + 1; i <= flipLeftWay; i++){
 
             if(squares[myTatePosition][i] === opponent){
 
               squares[myTatePosition][i] = currentPlayer;
-              setSquares([...squares]);
+              console.log("ひっくり返る場所",myTatePosition,"：",i)
             }
             else{
               break;
             }
           }
           setSquares([...squares]);
+          return;
       }
+    }
       // 相手の右下にコマを置いて、左上から右下方向を確認して、ひっくり返る時の関数
       const upperLeftFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("upperLeftFlipPiece開始")
+        console.log("upperLeftFlipPiece開始-------------------------------------")
 
           const zero = 0;
           const seven = 7;
-
-          for (let i = myTatePosition + 1, j = myYokoPosition + 1; i < seven || j < seven; i++, j++) {
+          if(!(myTatePosition >= 7 || myYokoPosition >= 7)){
+          for (let i = myTatePosition + 1, j = myYokoPosition + 1; i <= seven && j <= seven; i++, j++) {
 
               // 右下へ戻りながら、相手のコマをひっくり返していく
               if(squares[i][j] == opponent){
@@ -736,18 +745,24 @@ const MatrixDisplay = () => {
                 
                 squares[tateFlipPosition][yokoFlipPosition] = currentPlayer;
                 console.log("ひっくり返る場所",tateFlipPosition,"：",yokoFlipPosition)
-                
+              }
+              else{
+                break;
               }
             }
-          setSquares([...squares]);
+            setSquares([...squares]);
+          return;
+          }
+          
         }
       // 相手の左下にコマを置いて、右上から左下方向を確認して、ひっくり返る時の関数
       const upperRightFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("upperRightFlipPiece開始")
+        console.log("upperRightFlipPiece開始-------------------------------------")
           
           const seven = 7;
-
-          for (let i = myTatePosition + 1, j = myYokoPosition - 1; i < seven && j < seven; i++, j--) {
+          const zero = 0;
+          if(!(myTatePosition >= 7 || myYokoPosition <= 0)){
+          for (let i = myTatePosition + 1, j = myYokoPosition - 1; i <= seven && j >= zero; i++, j--) {
 
               // 左下へ戻りながら、相手のコマをひっくり返していく
               if(squares[i][j] == opponent){
@@ -756,19 +771,23 @@ const MatrixDisplay = () => {
                 
                 squares[tateFlipPosition][yokoFlipPosition] = currentPlayer;
                 console.log("ひっくり返る場所",tateFlipPosition,"：",yokoFlipPosition)
-                
+              }
+              else{
+                break;
               }
             }
-          setSquares([...squares]);
+            setSquares([...squares]);
+          return;
+          }
         }
         // 相手の右上にコマを置いて、左下から右上方向を確認して、ひっくり返る時の関数
       const downLeftFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("downLeftFlipPiece開始")
+        console.log("downLeftFlipPiece開始-------------------------------------")
 
           const seven = 7;
           const zero = 0;
-
-          for (let i = myTatePosition - 1, j = myYokoPosition + 1; i > zero && j < seven; i--, j++) {
+          if(!(myTatePosition <= 0 || myYokoPosition >= 7)){
+          for (let i = myTatePosition - 1, j = myYokoPosition + 1; i >= zero && j <= seven; i--, j++) {
 
               // 左下へ戻りながら、相手のコマをひっくり返していく
               if(squares[i][j] == opponent){
@@ -777,18 +796,22 @@ const MatrixDisplay = () => {
                 
                 squares[tateFlipPosition][yokoFlipPosition] = currentPlayer;
                 console.log("ひっくり返る場所",tateFlipPosition,"：",yokoFlipPosition)
-                
+              }
+              else{
+                break;
               }
             }
-          setSquares([...squares]);
+            setSquares([...squares]);
+          return;
+          }
         }
       // 相手の左上にコマを置いて、右下から左上方向を確認して、ひっくり返る時の関数
       const downRightFlipPiece = (myTatePosition:any, myYokoPosition:any, opponent:any, currentPlayer:any) => {
-        console.log("downRightFlipPiece開始")
+        console.log("downRightFlipPiece開始-------------------------------------")
 
           const zero = 0;
-
-          for (let i = myTatePosition - 1, j = myYokoPosition - 1; i > zero && j > zero; i--, j--) {
+          if(!(myTatePosition <= 0 || myYokoPosition <= 0)){
+          for (let i = myTatePosition - 1, j = myYokoPosition - 1; i >= zero && j >= zero; i--, j--) {
 
               if(squares[i][j] == opponent){
                 let tateFlipPosition = i;
@@ -796,10 +819,14 @@ const MatrixDisplay = () => {
                 
                 squares[tateFlipPosition][yokoFlipPosition] = currentPlayer;
                 console.log("ひっくり返る場所",tateFlipPosition,"：",yokoFlipPosition)
-                
+              }
+              else{
+                break;
               }
             }
-          setSquares([...squares]);
+            setSquares([...squares]);
+          return;
+          }
         }
         
   return (
@@ -815,13 +842,18 @@ const MatrixDisplay = () => {
               {row.map((cell: any, yokoIndex: any) => (
                 <td style={tdStyle} key={yokoIndex} onClick={() => {
                   changePiece(cell,tateIndex,yokoIndex); console.log("clicked（縦・横）",tateIndex,yokoIndex,"cellは",cell)} }>
-                    <span>{cell}</span></td>
+                    <span style={imgStyle}>{cell == 2 ? <img src="./images/black.png" alt="black"/> 
+                    : cell == 1 ? <img src="./images/white.png" alt="white" /> 
+                    : <img src=""/> 
+                    }</span></td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
+      
     </div>
+    
   );
 };
 
