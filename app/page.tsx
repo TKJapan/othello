@@ -1,5 +1,5 @@
 import MatrixDisplay from "./Othello/MatrixDisplay";
-import Othello from "./Othello/Othello"
+
 
 export default function App() {
   
