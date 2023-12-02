@@ -868,7 +868,7 @@ const MatrixDisplay = () => {
   return (
     <div>
     <button onClick={pass}style={buttonStyle}>PASS</button>
-    <p style={pStyle}>現在のプレイヤー：{player}</p>
+    <p style={pStyle}>現在のプレイヤー：{player == "black" ? "黒" : "白"}</p>
     <p style={pStyle}>メッセージ：{message}</p>
     <br /><br />
       <table style={tableStyle}>
