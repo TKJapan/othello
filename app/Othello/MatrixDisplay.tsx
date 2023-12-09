@@ -1,5 +1,5 @@
 'use client';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 const MatrixDisplay = () => {
     // 0は何も置いていない状態
@@ -24,25 +24,45 @@ const MatrixDisplay = () => {
 
     const [message, setMessage] = useState("");
 
+    const [blackCount, setBlackCount] = useState(0);
+
+    const [whiteCount, setWhiteCount] = useState(0);
+
     const tableStyle = {backgroundColor:"#00BF64",borderWidth:"2px", borderColor:"#aaaaaa", borderStyle:'solid'};
 
     const tdStyle = {textAlign: "center" as "center",height:"4em",width:"4em",borderWidth:"2px", borderColor:"#aaaaaa", borderStyle:'solid'};
   
     const buttonStyle = {backgroundColor:"pink",fontColor:"black",height:"2em",width:"10em",borderWidth:"2px", borderColor:"#aaaaaa", borderStyle:'solid'};
 
-    const pStyle = {}
+    const pStyle = {fontSize: "1.2rem"}
 
     const imgStyle = { width:"60px", display:"flex", alignItems:"center", justifyContent:"center"}
 
+    const countColor = () => {
+
+      let flat = squares.flat()
+      let black = 0;
+      let white = 0;
+      for(let i = 0; i <= flat.length; i++){
+        if(flat[i] == 2){
+          black++
+          console.log("blackCount",blackCount)
+        }
+        else if(flat[i] == 1){
+          white++
+          console.log("whiteCount",whiteCount)
+        }
+      }
+      setBlackCount(black);
+      setWhiteCount(white);
+    }
 
 
     const pass = () => {
       if (player === "black") {
-
         setPlayer("white");
       } 
       else if (player === "white") {
-        
         setPlayer("black");
       } 
       setCount(count + 1);
@@ -372,6 +392,7 @@ const MatrixDisplay = () => {
               }
             }
           }
+          countColor();
           return canFlip;
           }
           
@@ -488,7 +509,6 @@ const MatrixDisplay = () => {
             console.log("相手の左にコマを置いて、右方向を確認")
             if (squares[tateIndex][yokoIndex + oneRightPosition] === opponent) {
               let rightOpponentPosition = yokoIndex + oneRightPosition;
-// ここでrightSideLimitまでチェックするから、余計に反転してしまう。
               while (rightOpponentPosition <= rightSideLimit) {
                 if (squares[tateIndex][rightOpponentPosition] === currentPlayer) {
                   console.log("挟めるのを確認")
@@ -667,6 +687,7 @@ const MatrixDisplay = () => {
               }
             }
           }
+          countColor();
           return canFlip;
           }
         }
@@ -870,6 +891,7 @@ const MatrixDisplay = () => {
     <button onClick={pass}style={buttonStyle}>PASS</button>
     <p style={pStyle}>現在のプレイヤー：{player == "black" ? "黒" : "白"}</p>
     <p style={pStyle}>メッセージ：{message}</p>
+    <p style={pStyle}>得点　黒：{blackCount} 白：{whiteCount}</p>
     <br /><br />
       <table style={tableStyle}>
         <tbody>
